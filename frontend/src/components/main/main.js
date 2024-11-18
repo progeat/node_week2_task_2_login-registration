@@ -79,8 +79,12 @@ export const Main = () => {
 						onChange: () => setServerError(null),
 					})}
 				/>
-				<button type="submit">Отправить</button>
-				{errorMessage && <div>{errorMessage}</div>}
+				<button type="submit" disabled={!!errorMessage}>
+					Отправить
+				</button>
+				{errorMessage && (
+					<div className={styled['form-error']}>{errorMessage}</div>
+				)}
 			</form>
 		</div>
 	);
