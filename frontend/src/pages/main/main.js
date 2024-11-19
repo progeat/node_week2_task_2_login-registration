@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { request } from '../../utils';
+import { request } from '../../hooks';
 import styled from './main.module.css';
 
 const appointmentFormSchema = yup.object().shape({
@@ -11,10 +11,7 @@ const appointmentFormSchema = yup.object().shape({
 		.required('Заполните ФИО')
 		.min(3, 'Неверно заполнен ФИО. Минимум 3 символа'),
 	phone: yup.string().required('Заполните телефон'),
-	message: yup
-		.string()
-		.required('Заполните поле "Опишите вашу проблему"')
-		.min(3, 'Неверно заполнено поле "Опишите вашу проблему. Минимум 3 символа"'),
+	message: yup.string(),
 });
 
 export const Main = () => {

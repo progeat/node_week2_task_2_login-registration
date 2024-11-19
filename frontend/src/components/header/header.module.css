@@ -6,6 +6,11 @@
 	background-color: #ddd;
 }
 
-.btn:not(:last-child) {
+.link {
+	color: #333;
+	text-decoration: none;
+}
+
+.link:not(:last-child) {
 	margin-right: 15px;
 }
