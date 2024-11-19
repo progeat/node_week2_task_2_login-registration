@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import InputMask from 'react-input-mask';
 import { request } from '../../hooks';
 import styled from './main.module.css';
 
@@ -61,13 +62,21 @@ export const Main = () => {
 					})}
 				/>
 				<label>Номер телефона</label>
-				<input
+
+				<InputMask
+					mask="+7 (999) 999-99-99"
+					{...register('phone', {
+						onChange: () => setServerError(null),
+					})}
+				/>
+
+				{/* <input
 					name="phone"
 					type="number"
 					{...register('phone', {
 						onChange: () => setServerError(null),
 					})}
-				/>
+				/> */}
 				<label>Опишите вашу проблему</label>
 				<textarea
 					name="message"
