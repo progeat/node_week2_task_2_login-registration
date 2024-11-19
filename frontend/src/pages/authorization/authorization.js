@@ -1,15 +1,8 @@
 import { useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import { AuthFormError, Button, H2, Input } from '../../components';
-// import { useResetForm } from '../../hooks';
-// import { setUser } from '../../actions';
-// import { selectUserRole } from '../../selectors';
-// import { ROLE } from '../../constants';
-// import styled from 'styled-components';
 import { request } from '../../utils';
 import styled from './authorization.module.css';
 
@@ -27,6 +20,8 @@ const authFormSchema = yup.object().shape({
 });
 
 export const Authorization = () => {
+	const navigate = useNavigate();
+
 	const {
 		register,
 		reset,
@@ -42,12 +37,6 @@ export const Authorization = () => {
 
 	const [serverError, setServerError] = useState(null);
 
-	// const dispatch = useDispatch();
-
-	// const roleId = useSelector(selectUserRole);
-
-	// useResetForm(reset);
-
 	const onSubmit = ({ login, password }) => {
 		request('/login', 'POST', { login, password }).then(({ error, user }) => {
 			if (error) {
@@ -55,9 +44,10 @@ export const Authorization = () => {
 				return;
 			}
 
-			// dispatch(setUser(user));
 			sessionStorage.setItem('userData', JSON.stringify(user));
 			reset();
+
+			navigate('/appointments');
 		});
 	};
 
@@ -75,7 +65,7 @@ export const Authorization = () => {
 				<label>Электронная почта</label>
 				<input
 					type="email"
-					placeholder="Почта...(staff)"
+					placeholder="Почта...(staff@staff.ru)"
 					{...register('login', {
 						onChange: () => setServerError(null),
 					})}

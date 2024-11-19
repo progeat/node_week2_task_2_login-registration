@@ -62,21 +62,12 @@ export const Main = () => {
 					})}
 				/>
 				<label>Номер телефона</label>
-
 				<InputMask
 					mask="+7 (999) 999-99-99"
 					{...register('phone', {
 						onChange: () => setServerError(null),
 					})}
 				/>
-
-				{/* <input
-					name="phone"
-					type="number"
-					{...register('phone', {
-						onChange: () => setServerError(null),
-					})}
-				/> */}
 				<label>Опишите вашу проблему</label>
 				<textarea
 					name="message"
