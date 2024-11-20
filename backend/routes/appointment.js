@@ -1,5 +1,10 @@
 const express = require('express');
-const { addAppointment } = require('../controllers/appointment');
+const {
+  addAppointment,
+  getAppointments,
+} = require('../controllers/appointment');
+const authenticated = require('../middlewares/authenticated');
+const mapAppointment = require('../helpers/mapAppointment');
 
 const router = express.Router({ mergeParams: true });
 
@@ -11,6 +16,12 @@ router.post('/', async (req, res) => {
   });
 
   res.send({ data: newAppointment });
+});
+
+router.get('/', authenticated, async (req, res) => {
+  const appointments = await getAppointments();
+
+  res.send({ data: appointments.map(mapAppointment) });
 });
 
 module.exports = router;

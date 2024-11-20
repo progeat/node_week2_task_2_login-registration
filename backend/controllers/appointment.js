@@ -9,6 +9,10 @@ const addAppointment = async (appointment) => {
   return newAppointment;
 };
 
+// get
+const getAppointments = () => Appointment.find();
+
 module.exports = {
   addAppointment,
+  getAppointments,
 };

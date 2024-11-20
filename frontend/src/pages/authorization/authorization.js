@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,7 +19,7 @@ const authFormSchema = yup.object().shape({
 		.max(30, 'Неверно заполнен пароль. Максимум 30 символов'),
 });
 
-export const Authorization = () => {
+export const Authorization = ({ user, setUser }) => {
 	const navigate = useNavigate();
 
 	const {
@@ -37,26 +37,29 @@ export const Authorization = () => {
 
 	const [serverError, setServerError] = useState(null);
 
+	if (user) {
+		return <Navigate to="/appointments" />;
+	}
+
 	const onSubmit = ({ login, password }) => {
-		request('/login', 'POST', { login, password }).then(({ error, user }) => {
-			if (error) {
-				setServerError(`Ошибка запроса: ${error}`);
-				return;
-			}
+		request('/login', 'POST', { login, password }).then(
+			({ error, user: userRes }) => {
+				if (error) {
+					setServerError(`Ошибка запроса: ${error}`);
+					return;
+				}
 
-			sessionStorage.setItem('userData', JSON.stringify(user));
-			reset();
+				sessionStorage.setItem('userData', JSON.stringify(userRes));
+				reset();
 
-			navigate('/appointments');
-		});
+				setUser(userRes);
+				navigate('/appointments');
+			},
+		);
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message;
 	const errorMessage = formError || serverError;
-
-	// if (roleId !== ROLE.GUEST) {
-	// 	return <Navigate to="/appointments" />;
-	// }
 
 	return (
 		<div className={styled.authorization}>
