@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import InputMask from 'react-input-mask';
-import { request } from '../../hooks';
+import { getFormatedMaskPhone, request } from '../../utils';
 import styled from './main.module.css';
 
 const appointmentFormSchema = yup.object().shape({
@@ -20,6 +19,7 @@ export const Main = () => {
 		register,
 		reset,
 		handleSubmit,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -62,11 +62,28 @@ export const Main = () => {
 					})}
 				/>
 				<label>Номер телефона</label>
-				<InputMask
-					mask="+7 (999) 999-99-99"
+				{/* <Controller
+					name="phone"
+					render={({ field }) => {
+						// sending integer instead of string.
+						return (
+							<input
+								{...field}
+								onChange={(e) => field.onChange(parseInt(e.target.value))}
+							/>
+						);
+					}}
+				/> */}
+				<input
+					name="phone"
+					type="text"
 					{...register('phone', {
-						onChange: () => setServerError(null),
+						onChange: ({ target }) => {
+							setValue('phone', getFormatedMaskPhone(target.value));
+							setServerError(null);
+						},
 					})}
+					placeholder="+7 (___) ___-__-__"
 				/>
 				<label>Опишите вашу проблему</label>
 				<textarea

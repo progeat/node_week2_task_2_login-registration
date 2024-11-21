@@ -5,10 +5,10 @@ import { request } from '../../utils';
 export const Appointments = ({ user }) => {
 	const [appointments, setAppointments] = useState([]);
 
-	// TODO в useEffect добавить условие существования пользователя, иначе редиректы
 	useEffect(() => {
 		request('/appointments').then((appointmentsData) => {
 			setAppointments(appointmentsData);
+			console.log(appointmentsData);
 		});
 	}, []);
 
@@ -18,5 +18,33 @@ export const Appointments = ({ user }) => {
 
 	console.log('Заявки', appointments);
 
-	return <div>Список заявок</div>;
+	return (
+		<div>
+			<h2>Заявки с формы</h2>
+			{appointments[0] ? (
+				<table>
+					<thead>
+						<tr>
+							<th>Дата отправки</th>
+							<th>ФИО</th>
+							<th>Телефон</th>
+							<th>Проблема</th>
+						</tr>
+					</thead>
+					<tbody>
+						{appointments.map((appointment) => (
+							<tr key={appointment.id}>
+								<td>{appointment.createdAt}</td>
+								<td>{appointment.name}</td>
+								<td>{appointment.phone}</td>
+								<td>{appointment.message}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			) : (
+				<div>Заявок нет</div>
+			)}
+		</div>
+	);
 };
