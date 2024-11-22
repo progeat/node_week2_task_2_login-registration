@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getFormatedMaskPhone, request } from '../../utils';
+import { useHookFormMask } from 'use-mask-input';
+import { request } from '../../utils';
 import styled from './main.module.css';
 
 const appointmentFormSchema = yup.object().shape({
@@ -19,7 +20,6 @@ export const Main = () => {
 		register,
 		reset,
 		handleSubmit,
-		setValue,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -29,6 +29,8 @@ export const Main = () => {
 		},
 		resolver: yupResolver(appointmentFormSchema),
 	});
+
+	const registerWithMask = useHookFormMask(register);
 
 	const [serverError, setServerError] = useState(null);
 
@@ -51,7 +53,7 @@ export const Main = () => {
 
 	return (
 		<div className={styled.main}>
-			<h1>Запись к врачу</h1>
+			<h2>Запись к врачу</h2>
 			<form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
 				<label>ФИО</label>
 				<input
@@ -62,28 +64,13 @@ export const Main = () => {
 					})}
 				/>
 				<label>Номер телефона</label>
-				{/* <Controller
-					name="phone"
-					render={({ field }) => {
-						// sending integer instead of string.
-						return (
-							<input
-								{...field}
-								onChange={(e) => field.onChange(parseInt(e.target.value))}
-							/>
-						);
-					}}
-				/> */}
 				<input
 					name="phone"
 					type="text"
-					{...register('phone', {
-						onChange: ({ target }) => {
-							setValue('phone', getFormatedMaskPhone(target.value));
-							setServerError(null);
-						},
+					{...registerWithMask('phone', ['+7 (999) 999-99-99'], {
+						required: true,
+						onChange: () => setServerError(null),
 					})}
-					placeholder="+7 (___) ___-__-__"
 				/>
 				<label>Опишите вашу проблему</label>
 				<textarea

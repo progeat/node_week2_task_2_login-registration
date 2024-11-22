@@ -9,8 +9,6 @@ export const App = () => {
 
 	const navigate = useNavigate();
 
-	console.log('user', user);
-
 	useLayoutEffect(() => {
 		const currentUserDataJSON = sessionStorage.getItem('userData');
 

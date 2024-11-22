@@ -1,27 +1,40 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { request } from '../../utils';
+import { useNavigate } from 'react-router-dom';
+import { formatDate, request } from '../../utils';
+import styled from './appointments.module.css';
+import { Loader } from '../../components';
 
 export const Appointments = ({ user }) => {
 	const [appointments, setAppointments] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		request('/appointments').then((appointmentsData) => {
-			setAppointments(appointmentsData);
-			console.log(appointmentsData);
-		});
-	}, []);
+		if (!user) {
+			return navigate('/login');
+		}
 
-	if (!user) {
-		return <Navigate to={'/login'} />;
-	}
+		setIsLoading(true);
 
-	console.log('Заявки', appointments);
+		request('/appointments')
+			.then((appointmentsData) => {
+				setAppointments(appointmentsData.data);
+			})
+			.catch((error) => {
+				console.error(error);
+				setError(error.message);
+			})
+			.finally(() => setIsLoading(false));
+	}, [user, navigate]);
+
+	if (isLoading) return <Loader />;
+	if (error) return <div>{error}</div>;
 
 	return (
-		<div>
+		<div className={styled.appointments}>
 			<h2>Заявки с формы</h2>
-			{appointments[0] ? (
+			{appointments.length ? (
 				<table>
 					<thead>
 						<tr>
@@ -34,7 +47,7 @@ export const Appointments = ({ user }) => {
 					<tbody>
 						{appointments.map((appointment) => (
 							<tr key={appointment.id}>
-								<td>{appointment.createdAt}</td>
+								<td>{formatDate(appointment.createdAt)}</td>
 								<td>{appointment.name}</td>
 								<td>{appointment.phone}</td>
 								<td>{appointment.message}</td>
