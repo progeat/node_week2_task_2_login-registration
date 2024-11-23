@@ -38,6 +38,7 @@
 }
 
 .form > button {
+	position: relative;
 	width: 200px;
 	height: 35px;
 	border: 1px solid #aaaaaa;
@@ -48,4 +49,9 @@
 .form-error {
 	padding: 5px 0;
 	color: red;
+}
+
+.res-message {
+	padding: 5px 0;
+	color: #70a672;
 }

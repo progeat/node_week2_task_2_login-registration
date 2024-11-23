@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
+const chalk = require('chalk');
 
 const port = 3001;
 const app = express();
@@ -19,6 +20,6 @@ mongoose
   )
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server started on port ${port}`);
+      console.log(chalk.bgGreen(`Server started on port ${port}`));
     });
   });

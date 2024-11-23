@@ -82,7 +82,7 @@ export const Authorization = ({ user, setUser }) => {
 					})}
 				/>
 				<button type="submit" disabled={!!formError}>
-					Авторизоваться
+					Войти
 				</button>
 				{errorMessage && (
 					<div className={styled['form-error']}>{errorMessage}</div>
